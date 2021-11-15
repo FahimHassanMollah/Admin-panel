@@ -23,7 +23,16 @@ Route::middleware(['auth'])->group(function () {
         return view('welcome');
     });
     Route::get(('/dashboard'),[DashboardController::class,'index'])->name('dashboard');
+
+
+    // category routes
+
+    Route::resource('category', CategoryController::class);
 });
+
+
+
+
 
 
 Auth::routes();

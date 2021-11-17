@@ -1,10 +1,15 @@
 <?php
 
+// use App\Http\Controllers\CategoryController;
+
+// use App\Http\Controllers\CategoryController;
+
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
 
 use Illuminate\Support\Facades\Route;
-
+// CategoryController
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -22,12 +27,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/', function () {
         return view('welcome');
     });
-    Route::get(('/dashboard'),[DashboardController::class,'index'])->name('dashboard');
+    Route::get(('/dashboard'), [DashboardController::class,'index'])->name('dashboard');
 
 
     // category routes
-
-    Route::resource('category', CategoryController::class);
+    Route::resource('category', '\App\Http\Controllers\CategoryController');
+    Route::get(('/update-category-status/{category}'), [CategoryController::class,'updateCategoryStatus'])->name('category.status.update');
 });
 
 
@@ -36,5 +41,7 @@ Route::middleware(['auth'])->group(function () {
 
 
 Auth::routes();
+
+
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');

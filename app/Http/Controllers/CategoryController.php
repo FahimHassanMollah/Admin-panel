@@ -12,9 +12,22 @@ class CategoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function updateCategoryStatus(Category $category)
+    {
+
+        $category->status =
+        $category->status === 0 ? $category->status = 1 : $category->status = 0;
+        $category->save();
+
+        return redirect(route('category.index'))->with('message', 'Updated data');
+
+    }
     public function index()
     {
-        return view('pages.category.manageCategory');
+        $categories = Category::all();
+        // dd(1);
+        return view('pages.category.manageCategory', compact('categories'));
     }
 
     /**
@@ -36,13 +49,18 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         //
-        // dd($request->all());
+        $imageName = $request->file('image')->getClientOriginalName();
+        // dd($imageName);
+        $request->image->move(public_path('category-images/'), $imageName);
+        // dd($request->file('image'));
         $category = new Category();
         $category->name = $request->name;
         $category->description = $request->description;
-        $category->image = '';
+        $category->image = 'category-images/' . $imageName;
         $category->status = $request->status;
         $category->save();
+        $request->session()->flash('message', 'Category created');
+        return redirect()->route('category.index');
     }
 
     /**
@@ -89,4 +107,6 @@ class CategoryController extends Controller
     {
         //
     }
+
+
 }

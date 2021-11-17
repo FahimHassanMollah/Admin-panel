@@ -14,6 +14,11 @@
                             <div class="card-body">
                                 <h4 class="card-title mb-4">Create New Category</h4>
                                 <hr>
+                                @if (session('message'))
+                                    <div class="alert alert-success" role="alert">
+                                        {{ session('message') }}
+                                    </div>
+                                @endif
                                 <form action="{{ route('category.store') }}" method="POST" enctype="multipart/form-data">
                                     @csrf
                                     <div class="form-group row mb-4">
@@ -37,14 +42,14 @@
                                         <label for="horizontal-description-input"
                                             class="col-sm-2 col-form-label">Publication status</label>
                                         <div class="custom-control custom-radio mb-3">
-                                            <input type="radio" id="customRadio1" name="status"
-                                                class="custom-control-input" value="1">
+                                            <input type="radio" id="customRadio1" name="status" class="custom-control-input"
+                                                value="1">
                                             <label class="custom-control-label" for="customRadio1">Published
                                             </label>
                                         </div>
                                         <div class="custom-control custom-radio mb-3 ml-3">
-                                            <input type="radio" id="customRadio2" name="status"
-                                                class="custom-control-input" value="0">
+                                            <input type="radio" id="customRadio2" name="status" class="custom-control-input"
+                                                value="0">
                                             <label class="custom-control-label" for="customRadio2">Unpublished</label>
                                         </div>
                                     </div>
@@ -96,43 +101,34 @@
 
 
                                     <tbody>
-                                        <tr>
-                                            <td>Tiger Nixon</td>
-                                            <td>System Architect</td>
-                                            <td>Edinburgh</td>
-                                            <td>61</td>
-                                            <td>2011/04/25</td>
-                                            <td>
-                                                <a href="" class="btn btn-primary btn-sm">
-                                                    <i class="fas fa-check "></i>
-                                                </a>
-                                                <a href="" class="btn btn-success btn-sm">
-                                                    <i class="fas fa-edit "></i>
-                                                </a>
-                                                <a href="" class="btn btn-danger btn-sm">
-                                                    <i class="fas fa-trash-alt "></i>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Garrett Winters</td>
-                                            <td>Accountant</td>
-                                            <td>Tokyo</td>
-                                            <td>63</td>
-                                            <td>2011/07/25</td>
+                                        @foreach ($categories as $category)
+                                            <tr>
+                                                <td>{{ $loop->index }}</td>
+                                                <td>{{ $category->name }}</td>
+                                                <td>{{ $category->description }}</td>
+                                                <td>
+                                                    <img src="{{ asset('/') . $category->image }}" class="img-fluid"
+                                                        alt="" srcset="">
+                                                </td>
+                                                <td>{{ $category->status === 1 ? 'Active' : 'Inactive' }}</td>
 
-                                            <td>
-                                                <a href="" class="btn btn-primary btn-sm">
-                                                    <i class="fas fa-check "></i>
-                                                </a>
-                                                <a href="" class="btn btn-success btn-sm">
-                                                    <i class="fas fa-edit "></i>
-                                                </a>
-                                                <a href="" class="btn btn-danger btn-sm">
-                                                    <i class="fas fa-trash-alt "></i>
-                                                </a>
-                                            </td>
-                                        </tr>
+
+                                                <td>
+                                                    <a href="{{ route('category.status.update', ['category' => $category->id]) }}"
+                                                        class="btn btn-primary btn-sm {{ $category->status === 1 ? 'bg-success' : 'bg-danger' }}">
+                                                        <i class="fas fa-check "></i>
+                                                    </a>
+                                                    <a href="" class="btn btn-success btn-sm">
+                                                        <i class="fas fa-edit "></i>
+                                                    </a>
+                                                    <a href="" class="btn btn-danger btn-sm">
+                                                        <i class="fas fa-trash-alt "></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+
+
                                     </tbody>
                                 </table>
 

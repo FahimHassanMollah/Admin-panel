@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use Illuminate\Http\Request;
 
+use function PHPUnit\Framework\fileExists;
+
 class CategoryController extends Controller
 {
     /**
@@ -17,12 +19,12 @@ class CategoryController extends Controller
     {
 
         $category->status =
-        $category->status === 0 ? $category->status = 1 : $category->status = 0;
+            $category->status === 0 ? $category->status = 1 : $category->status = 0;
         $category->save();
 
         return redirect(route('category.index'))->with('message', 'Updated data');
-
     }
+
     public function index()
     {
         $categories = Category::all();
@@ -49,15 +51,20 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         //
-        $imageName = $request->file('image')->getClientOriginalName();
-        // dd($imageName);
-        $request->image->move(public_path('category-images/'), $imageName);
-        // dd($request->file('image'));
         $category = new Category();
         $category->name = $request->name;
         $category->description = $request->description;
-        $category->image = 'category-images/' . $imageName;
         $category->status = $request->status;
+
+        if ($request->file('image')) {
+            $imageName = $request->file('image')->getClientOriginalName();
+            $request->image->move(public_path('category-images/'), $imageName);
+            $category->image = 'category-images/' . $imageName;
+        } else {
+            $category->image = 'dummy.png';
+        }
+
+
         $category->save();
         $request->session()->flash('message', 'Category created');
         return redirect()->route('category.index');
@@ -80,9 +87,11 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Category $category)
     {
         //
+        return view('pages.category.categoryEdit', compact('category'));
+        // dd($category);
     }
 
     /**
@@ -92,9 +101,30 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Category $category)
     {
         //
+        // dd($category);
+        if ($request->file('image')) {
+            if (fileExists($category->image)) {
+                unlink($category->image);
+                $imageName = $request->file('image')->getClientOriginalName();
+                $request->image->move(public_path('category-images/'), $imageName);
+                $category->image = 'category-images/' . $imageName;
+            }
+        } else {
+
+            $category->image = $category->image;
+        }
+        $category->name = $request->name;
+        $category->description = $request->description;
+        $category->status = $request->status;
+        $category->save();
+        $request->session()->flash(
+            'message',
+            'Category updated'
+        );
+        return redirect()->route('category.index');
     }
 
     /**
@@ -103,10 +133,23 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Category $category,Request $request)
     {
         //
+        if (fileExists($category->image)) {
+           if ($category->image !== 'dummy.png') {
+                unlink($category->image);
+           }
+           else{
+
+           }
+            $category->delete();
+            $request->session()->flash(
+                'message',
+                'Category deleted'
+            );
+            return redirect()->route('category.index');
+        }
+        // dd($category);
     }
-
-
 }

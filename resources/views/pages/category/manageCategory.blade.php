@@ -107,7 +107,8 @@
                                                 <td>{{ $category->name }}</td>
                                                 <td>{{ $category->description }}</td>
                                                 <td>
-                                                    <img src="{{ asset('/') . $category->image }}" class="img-fluid"
+                                                    <img style="height: 80px;witdh:'100px'"
+                                                        src="{{ asset('/') . $category->image }}" class="img-fluid"
                                                         alt="" srcset="">
                                                 </td>
                                                 <td>{{ $category->status === 1 ? 'Active' : 'Inactive' }}</td>
@@ -118,12 +119,20 @@
                                                         class="btn btn-primary btn-sm {{ $category->status === 1 ? 'bg-success' : 'bg-danger' }}">
                                                         <i class="fas fa-check "></i>
                                                     </a>
-                                                    <a href="" class="btn btn-success btn-sm">
+                                                    <a href="{{ route('category.edit', $category->id) }}"
+                                                        class="btn btn-success btn-sm">
                                                         <i class="fas fa-edit "></i>
                                                     </a>
-                                                    <a href="" class="btn btn-danger btn-sm">
-                                                        <i class="fas fa-trash-alt "></i>
-                                                    </a>
+
+                                                    <form class="d-inline-block" action="{{ route('category.destroy', $category->id) }}"
+                                                        method="post">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-danger btn-sm d-inline-block">
+                                                            <i class="fas fa-trash-alt "></i>
+
+                                                        </button>
+                                                    </form>
                                                 </td>
                                             </tr>
                                         @endforeach

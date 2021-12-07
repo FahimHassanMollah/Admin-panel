@@ -33,7 +33,7 @@
                                         <label for="horizontal-category-name-input" class="col-sm-2 col-form-label">Color
                                             code</label>
                                         <div class="col-sm-10">
-                                            <input type="text" class="form-control" name="code"
+                                            <input type="color" class="form-control" name="code"
                                                 id="horizontal-category-name-input">
                                         </div>
                                     </div>

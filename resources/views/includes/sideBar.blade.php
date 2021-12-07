@@ -44,9 +44,9 @@
                          <li><a href="{{ route('category.index') }}">Manage Category</a></li>
                          <li><a href="{{ route('sub-category.index') }}">Manage Sub Category</a></li>
                          <li><a href="{{ route('brand.index') }}">Manage Brand</a></li>
-                         <li><a href="ecommerce-product-detail.html">Manage Size</a></li>
-                         <li><a href="ecommerce-product-detail.html">Manage Color</a></li>
-                         <li><a href="ecommerce-product-detail.html">Manage Unit</a></li>
+                         <li><a href="{{ route('size.index') }}">Manage Size</a></li>
+                         <li><a href="{{ route('color.index') }}">Manage Color</a></li>
+                         <li><a href="{{ route('unit.index') }}">Manage Unit</a></li>
 
                      </ul>
                  </li>
@@ -57,7 +57,7 @@
                          <span>Product Manager</span>
                      </a>
                      <ul class="sub-menu" aria-expanded="false">
-                         <li><a href="crypto-wallet.html">Add</a></li>
+                         <li><a href="{{ route('product.add') }}">Add new product</a></li>
                          <li><a href="crypto-buy-sell.html">Manage Products</a></li>
 
                      </ul>

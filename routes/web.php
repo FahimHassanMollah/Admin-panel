@@ -7,6 +7,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ColorController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SizeController;
 use App\Http\Controllers\SubCategoryController;
 use App\Http\Controllers\UnitController;
@@ -55,6 +56,16 @@ Route::middleware(['auth'])->group(function () {
     // unit
     Route::resource('unit', '\App\Http\Controllers\UnitController');
     Route::get(('/update-unit-status/{unit}'), [UnitController::class, 'updateUnitStatus'])->name('unit.status.update');
+
+    Route::get('/add-new-product',[ProductController::class,'index'])->name('product.add');
+
+    Route::post('/add-new-product',[ProductController::class,'create'])->name('product.create');
+
+    // manage product
+    Route::get('/manage-product',[ProductController::class, 'manage'])->name('product.manage');
+
+    // get all sub category
+    Route::get('/sub-categories/{id}',[ProductController::class, 'getSubCategories']);
 
 });
 

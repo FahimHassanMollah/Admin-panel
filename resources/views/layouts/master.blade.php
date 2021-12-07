@@ -17,7 +17,7 @@
 </head>
 
 <body data-sidebar="dark">
-  
+
     @auth()
         @include('includes.header')
         @include('includes.sideBar')
@@ -27,6 +27,7 @@
     @yield('content')
 
     @include('includes.script')
+    @yield('script')
 </body>
 
 <!-- Mirrored from themesbrand.com/skote/layouts/vertical/auth-login.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 08 Sep 2020 15:08:04 GMT -->

@@ -33,3 +33,7 @@
         <script src="{{ asset('/') }}assets/js/pages/datatables.init.js"></script>
 
         <script src="{{ asset('/') }}assets/js/app.js"></script>
+           {{-- //summer note --}}
+        <script src="{{ asset('/') }}assets/libs/summernote/summernote-bs4.min.js"></script>
+          <script src="{{ asset('/') }}assets/js/pages/form-editor.init.js"></script>
+

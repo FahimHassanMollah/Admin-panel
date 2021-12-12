@@ -64,6 +64,12 @@ Route::middleware(['auth'])->group(function () {
     // manage product
     Route::get('/manage-product',[ProductController::class, 'manage'])->name('product.manage');
 
+    // single product details
+    Route::get('/product-details/{id}',[ProductController::class, 'details'])->name('product.details');
+
+    // product edit
+    Route::get('/product-edit/{id}',[ProductController::class, 'edit'])->name('product.edit');
+
     // get all sub category
     Route::get('/sub-categories/{id}',[ProductController::class, 'getSubCategories']);
 

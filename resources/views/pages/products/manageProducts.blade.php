@@ -47,17 +47,25 @@
                                                 <td>{{ $product->status === 1 ? 'Active' : 'Inactive' }}</td>
 
 
-                                                {{-- <td>
-                                                    <a href="{{ route('color.status.update', ['color' => $color->id]) }}"
+                                                <td>
+                                                    {{-- <a href="{{ route('color.status.update', ['color' => $color->id]) }}"
                                                         class="btn btn-primary btn-sm {{ $color->status === 1 ? 'bg-success' : 'bg-danger' }}">
                                                         <i class="fas fa-check "></i>
+                                                    </a> --}}
+                                                    <a href="{{ route('product.details', $product->id) }}"
+                                                        class="btn btn-primary btn-sm">
+                                                        View
                                                     </a>
-                                                    <a href="{{ route('color.edit', $color->id) }}"
+                                                    <a href="{{ route('product.edit', $product->id) }}"
+                                                        class="btn btn-warning btn-sm">
+                                                        Edit
+                                                    </a>
+                                                    {{-- <a href="{{ route('color.edit', $color->id) }}"
                                                         class="btn btn-success btn-sm">
                                                         <i class="fas fa-edit "></i>
-                                                    </a>
+                                                    </a> --}}
 
-                                                    <form class="d-inline-block" action="{{ route('color.destroy', $color->id) }}"
+                                                    {{-- <form class="d-inline-block" action="{{ route('color.destroy', $color->id) }}"
                                                         method="post">
                                                         @csrf
                                                         @method('DELETE')
@@ -65,8 +73,8 @@
                                                             <i class="fas fa-trash-alt "></i>
 
                                                         </button>
-                                                    </form>
-                                                </td> --}}
+                                                    </form> --}}
+                                                </td>
                                             </tr>
                                         @endforeach
 

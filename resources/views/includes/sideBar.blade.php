@@ -58,7 +58,7 @@
                      </a>
                      <ul class="sub-menu" aria-expanded="false">
                          <li><a href="{{ route('product.add') }}">Add new product</a></li>
-                         <li><a href="crypto-buy-sell.html">Manage Products</a></li>
+                         <li><a href="{{ route('product.manage') }}">Manage Products</a></li>
 
                      </ul>
                  </li>

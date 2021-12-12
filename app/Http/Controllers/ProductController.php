@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Color;
+use App\Models\OtherImage;
 use App\Models\OtherImagee;
 use App\Models\Product;
 use App\Models\ProductColor;
@@ -12,8 +13,10 @@ use App\Models\ProductSize;
 use App\Models\Size;
 use App\Models\SubCategory;
 use App\Models\Unit;
-use DB;
+
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
 // use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
@@ -46,6 +49,7 @@ class ProductController extends Controller
     public function create(Request $request)
     {
         // return $request->all();
+
         DB::beginTransaction();
         try {
             $product = new Product();
@@ -65,6 +69,7 @@ class ProductController extends Controller
             $product->status = $request->status;
 
 
+
             if ($request->file('image')) {
                 $imageName = $request->file('image')->getClientOriginalName();
                 $request->image->move(public_path('product-images/'), $imageName);
@@ -72,26 +77,14 @@ class ProductController extends Controller
             } else {
                 $product->image = 'dummy.png';
             }
+
             $product->save();
-
-            foreach ($request->size_id as $size) {
-                $productSize = new ProductSize();
-                $productSize->product_id = $product->id;
-                $productSize->size_id = $size;
-                $productSize->save();
-            }
-
-            foreach ($request->color_id as $color) {
-                $productColor = new ProductColor();
-                $productColor->product_id = $product->id;
-                $productColor->color_id = $color;
-                $productColor->save();
-            }
-
+            $product->sizes()->attach($request->size_id);
+            $product->colors()->attach($request->color_id);
 
             if ($request->file('other_images')) {
                 foreach ($request->file('other_images') as $file) {
-                    $otherImages = new OtherImagee();
+                    $otherImages = new OtherImage();
                     $imageName = $file->getClientOriginalName();
                     // $imageName = $request->file()->getClientOriginalName();
                     $file->move(public_path('product-images/'), $imageName);
@@ -101,16 +94,46 @@ class ProductController extends Controller
                 }
             }
         } catch (\Throwable $th) {
+            dd($th);
             DB::rollback();
         }
+
         DB::commit();
+        // dd('');
         return redirect()->back();
     }
 
+
+
     public function manage()
     {
-        $products = Product::orderBy('id','desc')->take(500)->get(['id', 'name', 'selling_price', 'regular_price', 'image','code','category_id', 'short_description','brand_id']);
+        $products = Product::orderBy('id', 'desc')->take(500)->get(['id', 'name', 'selling_price', 'regular_price', 'image', 'code', 'category_id', 'short_description', 'brand_id']);
         // dd($products);
-        return view('pages.products.manageProducts',compact('products'));
+        return view('pages.products.manageProducts', compact('products'));
+    }
+
+    public function details($id)
+    {
+        $product = Product::find($id);
+        $product->load('category', 'subcategory', 'brand', 'unit', 'colors', 'sizes', 'otherImages');
+        // dd($product);
+        return view('pages.products.viewProduct', ['product' => $product]);
+    }
+
+    public function edit($id)
+    {
+        $product = Product::find($id);
+        $product->load('category', 'subcategory', 'brand', 'unit', 'colors', 'sizes', 'otherImages');
+
+        $create_product_data = [];
+        $create_product_data['product'] = $product;
+        $create_product_data['categories'] = Category::where('status', 1)->get();
+        $create_product_data['subcategories'] = SubCategory::where('status', 1)->get();
+        $create_product_data['brands'] = Brand::where('status', 1)->get();
+        $create_product_data['colors'] = Color::where('status', 1)->get();
+        $create_product_data['units'] = Unit::where('status', 1)->get();
+        $create_product_data['sizes'] = Size::where('status', 1)->get();
+        // dd($create_product_data);
+        return view('pages.products.editProduct', $create_product_data);
     }
 }

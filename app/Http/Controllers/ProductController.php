@@ -13,9 +13,12 @@ use App\Models\ProductSize;
 use App\Models\Size;
 use App\Models\SubCategory;
 use App\Models\Unit;
+use Illuminate\Support\Str;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+
+use function PHPUnit\Framework\fileExists;
 
 // use Illuminate\Support\Facades\DB;
 
@@ -71,7 +74,7 @@ class ProductController extends Controller
 
 
             if ($request->file('image')) {
-                $imageName = $request->file('image')->getClientOriginalName();
+                $imageName = Str::random(10) . time() . '.' . $request->file('image')->getClientOriginalName();
                 $request->image->move(public_path('product-images/'), $imageName);
                 $product->image = 'product-images/' . $imageName;
             } else {
@@ -85,7 +88,7 @@ class ProductController extends Controller
             if ($request->file('other_images')) {
                 foreach ($request->file('other_images') as $file) {
                     $otherImages = new OtherImage();
-                    $imageName = $file->getClientOriginalName();
+                    $imageName = Str::random(10) . time() . '.' . $file->getClientOriginalName();
                     // $imageName = $request->file()->getClientOriginalName();
                     $file->move(public_path('product-images/'), $imageName);
                     $otherImages->image = 'product-images/' . $imageName;
@@ -103,7 +106,73 @@ class ProductController extends Controller
         return redirect()->back();
     }
 
+    public function update(Product $product, Request $request)
+    {
 
+        // return $product;
+        DB::beginTransaction();
+        try {
+            $product->category_id = $request->category_id;
+            $product->sub_category_id = $request->sub_category_id;
+            $product->brand_id = $request->brand_id;
+            $product->unit_id = $request->unit_id;
+            $product->name = $request->name;
+            $product->code = $request->code;
+            $product->model = $request->model;
+            $product->regular_price = $request->regular_price;
+            $product->selling_price = $request->selling_price;
+            $product->meta_tag = $request->meta_tag;
+            $product->meta_description = $request->meta_description;
+            $product->short_description = $request->short_description;
+            $product->long_description = $request->long_description;
+            $product->status = $request->status;
+
+            if ($request->file('image')) {
+                if (fileExists($product->image)) {
+                    if ($product->image !== 'dummy.png') {
+                        unlink($product->image);
+                    }
+                    $imageName = Str::random(10) . time() . '.' . $request->file('image')->getClientOriginalName();
+                    $request->image->move(public_path('product-images/'), $imageName);
+                    $product->image = 'product-images/' . $imageName;
+                }
+            } else {
+                $product->image = $product->image;
+            }
+
+            $product->save();
+            $product->sizes()->sync($request->size_id);
+            $product->colors()->sync($request->color_id);
+
+            if ($request->file('other_images')) {
+
+                foreach ($product->otherImages as $image) {
+                    if (fileExists($image->image)) {
+
+                        unlink($image->image);
+                        $image->delete();
+                    }
+                }
+                foreach ($request->file('other_images') as $file) {
+                    $otherImages = new OtherImage();
+                    $imageName = Str::random(10) . time() . '.' . $file->getClientOriginalName();
+                    // $imageName = $request->file()->getClientOriginalName();
+                    $file->move(public_path('product-images/'), $imageName);
+                    $otherImages->image = 'product-images/' . $imageName;
+                    $otherImages->product_id = $product->id;
+                    $otherImages->save();
+                }
+            }
+        } catch (\Throwable $th) {
+            dd($th);
+            DB::rollback();
+        }
+        DB::commit();
+
+        return redirect()->route('product.manage')->with('message',"product updated");
+
+
+    }
 
     public function manage()
     {
@@ -134,6 +203,7 @@ class ProductController extends Controller
         $create_product_data['units'] = Unit::where('status', 1)->get();
         $create_product_data['sizes'] = Size::where('status', 1)->get();
         // dd($create_product_data);
+        // dd($product);
         return view('pages.products.editProduct', $create_product_data);
     }
 }

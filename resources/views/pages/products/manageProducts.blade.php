@@ -13,11 +13,15 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">
-
+                                  @if (session('message'))
+                                    <div class="alert alert-success" role="alert">
+                                        {{ session('message') }}
+                                    </div>
+                                @endif
                                 <h1 class="card-title pb-1">All products informations</h1>
 
 
-                                <table id="datatable" class="table table-bordered dt-responsive nowrap"
+                                <table id="datatable" class="table table-bordered  "
                                     style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                     <thead>
                                         <tr>

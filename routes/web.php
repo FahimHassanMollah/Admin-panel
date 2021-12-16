@@ -70,6 +70,9 @@ Route::middleware(['auth'])->group(function () {
     // product edit
     Route::get('/product-edit/{id}',[ProductController::class, 'edit'])->name('product.edit');
 
+    // product update
+    Route::put('/product-edit/{product}',[ProductController::class, 'update'])->name('product.update');
+
     // get all sub category
     Route::get('/sub-categories/{id}',[ProductController::class, 'getSubCategories']);
 

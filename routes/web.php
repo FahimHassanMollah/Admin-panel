@@ -73,6 +73,9 @@ Route::middleware(['auth'])->group(function () {
     // product update
     Route::put('/product-edit/{product}',[ProductController::class, 'update'])->name('product.update');
 
+    // delete
+    Route::delete('/product-delete/{product}',[ProductController::class, 'destroy'])->name('product.destroy');
+
     // get all sub category
     Route::get('/sub-categories/{id}',[ProductController::class, 'getSubCategories']);
 

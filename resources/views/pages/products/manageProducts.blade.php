@@ -69,7 +69,7 @@
                                                         <i class="fas fa-edit "></i>
                                                     </a> --}}
 
-                                                    {{-- <form class="d-inline-block" action="{{ route('color.destroy', $color->id) }}"
+                                                    <form class="d-inline-block" action="{{ route('product.destroy', $product->id) }}"
                                                         method="post">
                                                         @csrf
                                                         @method('DELETE')
@@ -77,7 +77,7 @@
                                                             <i class="fas fa-trash-alt "></i>
 
                                                         </button>
-                                                    </form> --}}
+                                                    </form>
                                                 </td>
                                             </tr>
                                         @endforeach

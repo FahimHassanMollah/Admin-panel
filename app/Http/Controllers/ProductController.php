@@ -206,4 +206,32 @@ class ProductController extends Controller
         // dd($product);
         return view('pages.products.editProduct', $create_product_data);
     }
+
+    public function destroy(Product $product)
+    {
+        DB::beginTransaction();
+        try {
+            if (fileExists($product->image) && $product->image !== 'dummy.png') {
+                unlink($product->image);
+            }
+
+            foreach ($product->otherImages as $image) {
+                if (fileExists($image->image)) {
+
+                    unlink($image->image);
+                    $image->delete();
+                }
+            }
+            
+            $product->delete();
+
+        } catch (\Throwable $th) {
+            dd($th);
+            DB::rollback();
+        }
+
+        DB::commit();
+        return redirect()->route('product.manage')->with('message', "product updated");
+
+    }
 }

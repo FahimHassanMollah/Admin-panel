@@ -15,7 +15,7 @@ class CreateOtherImagesTable extends Migration
     {
         Schema::create('other_images', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('product_id');
+            $table->foreignId('product_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->text('image');
             $table->timestamps();
         });

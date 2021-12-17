@@ -10,6 +10,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SizeController;
 use App\Http\Controllers\SubCategoryController;
+use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UnitController;
 use Illuminate\Support\Facades\Route;
 // CategoryController
@@ -40,6 +41,8 @@ Route::middleware(['auth'])->group(function () {
     // sub category
     Route::resource('sub-category', '\App\Http\Controllers\SubCategoryController');
     Route::get(('/update-sub-category-status/{subcategory}'), [SubCategoryController::class, 'updateSubCategoryStatus'])->name('sub-category.status.update');
+    // get all sub category
+    Route::get('/sub-categories/{id}', [ProductController::class, 'getSubCategories']);
 
     // brand
     Route::resource('brand', '\App\Http\Controllers\BrandController');
@@ -56,6 +59,11 @@ Route::middleware(['auth'])->group(function () {
     // unit
     Route::resource('unit', '\App\Http\Controllers\UnitController');
     Route::get(('/update-unit-status/{unit}'), [UnitController::class, 'updateUnitStatus'])->name('unit.status.update');
+
+
+
+
+    // product routes
 
     Route::get('/add-new-product',[ProductController::class,'index'])->name('product.add');
 
@@ -76,8 +84,17 @@ Route::middleware(['auth'])->group(function () {
     // delete
     Route::delete('/product-delete/{product}',[ProductController::class, 'destroy'])->name('product.destroy');
 
-    // get all sub category
-    Route::get('/sub-categories/{id}',[ProductController::class, 'getSubCategories']);
+    /* ============ supplier routes ================*/
+
+    Route::get('/add-new-supplier', [SupplierController::class, 'index'])->name('supplier.add');
+
+    Route::post('/add-new-supplier', [SupplierController::class, 'store'])->name('supplier.store');
+
+    Route::get('/supplier-edit/{supplier}', [SupplierController::class, 'edit'])->name('supplier.edit');
+
+    Route::put('/supplier-edit/{supplier}', [SupplierController::class, 'update'])->name('supplier.update');
+
+    Route::delete('/supplier-delete/{supplier}', [SupplierController::class, 'destroy'])->name('supplier.destroy');
 
 });
 

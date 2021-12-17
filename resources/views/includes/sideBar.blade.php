@@ -69,7 +69,7 @@
                          <span>Supplier</span>
                      </a>
                      <ul class="sub-menu" aria-expanded="false">
-                         <li><a href="email-inbox.html">Manage Supplier</a></li>
+                         <li><a href="{{ route('supplier.add') }}">Manage Supplier</a></li>
                          <li><a href="email-read.html">Manage Supplier Payment</a></li>
                      </ul>
                  </li>

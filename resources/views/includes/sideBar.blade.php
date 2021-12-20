@@ -70,7 +70,7 @@
                      </a>
                      <ul class="sub-menu" aria-expanded="false">
                          <li><a href="{{ route('supplier.add') }}">Manage Supplier</a></li>
-                         <li><a href="email-read.html">Manage Supplier Payment</a></li>
+                         {{-- <li><a href="email-read.html">Manage Supplier Payment</a></li> --}}
                      </ul>
                  </li>
 
@@ -80,7 +80,7 @@
                          <span>Inventory</span>
                      </a>
                      <ul class="sub-menu" aria-expanded="false">
-                         <li><a href="invoices-list.html">New Inventory</a></li>
+                         <li><a href="{{ route('stock.add') }}">New Inventory</a></li>
                          <li><a href="invoices-detail.html">Manage Inventory</a></li>
                      </ul>
                  </li>

@@ -9,6 +9,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SizeController;
+use App\Http\Controllers\StockController;
 use App\Http\Controllers\SubCategoryController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UnitController;
@@ -95,6 +96,12 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/supplier-edit/{supplier}', [SupplierController::class, 'update'])->name('supplier.update');
 
     Route::delete('/supplier-delete/{supplier}', [SupplierController::class, 'destroy'])->name('supplier.destroy');
+
+
+    // stock routes
+    Route::get('/add-new-stock', [StockController::class, 'index'])->name('stock.add');
+    Route::get('/get-all-data-for-stock', [StockController::class, 'getAllData'])->name('stock.getAllData');
+
 
 });
 
